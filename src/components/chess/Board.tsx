@@ -52,7 +52,7 @@ export function Board({
             const file = flipped ? 7 - ci : ci;
             const rank = flipped ? ri + 1 : 8 - ri;
             const sq = `${FILES[file]}${rank}` as Square;
-            const light = (file + rank) % 2 === 1;
+            const light = (file + rank) % 2 === 0;
             const isTarget = targets.includes(sq);
             const isLast = lastMove && (lastMove.from === sq || lastMove.to === sq);
             const isKingCheck = cell?.type === "k" && cell.color === inCheck;
