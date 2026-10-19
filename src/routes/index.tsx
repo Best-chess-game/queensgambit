@@ -25,7 +25,7 @@ type Side = { mood: Mood; say: string; k: number };
 
 const HAPPY = ["Yes!! 🎉", "Got it!", "Ooh, nice!", "Who's the boss?"];
 const SAD = ["Oh no…", "Noooo!", "That hurt 😢", "Why did I do that?"];
-const rand = (a: string[]) => a[Math.floor(Math.random() * a.length)];
+const rand = (a: string[]) => a[Math.floor(Math.random() * a.length)] ?? "";
 
 function Index() {
   const [mode, setMode] = useState<Mode>("menu");
@@ -83,7 +83,7 @@ function Game({ mode, onExit }: { mode: Exclude<Mode, "menu">; onExit: () => voi
 
     if (game.isCheckmate()) { react(mover, "happy", "Checkmate! 🏆"); react(opp, "sad", "I lost… 😭"); return; }
     if (game.isDraw()) { react("w", "neutral", "A draw!"); react("b", "neutral", "Good game."); return; }
-    if (m.captured && VALUE[m.captured] >= 5) { react(mover, "happy", m.captured === "q" ? "I got your Queen! 👑" : rand(HAPPY)); react(opp, "sad", rand(SAD)); return; }
+    if (m.captured && (VALUE[m.captured] ?? 0) >= 5) { react(mover, "happy", m.captured === "q" ? "I got your Queen! 👑" : rand(HAPPY)); react(opp, "sad", rand(SAD)); return; }
     if (isHanging(game, to)) { react(mover, "sad", "Uh oh, bad move…"); react(opp, "happy", "Hehe, thanks!"); return; }
     if (m.captured) { react(mover, "happy", rand(HAPPY)); react(opp, diff >= 3 ? "sad" : "thinking", "Hmm…"); return; }
     if (game.inCheck()) { react(mover, "happy", "Check!"); react(opp, "thinking", "Yikes!"); return; }
@@ -99,6 +99,7 @@ function Game({ mode, onExit }: { mode: Exclude<Mode, "menu">; onExit: () => voi
       }, 650);
       return () => clearTimeout(t);
     }
+    return undefined;
   }, [fen, mode]);
 
   const reset = () => {
