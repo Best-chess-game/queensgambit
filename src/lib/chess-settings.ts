@@ -19,10 +19,10 @@ export const PIECE_SETS = [
 ] as const;
 
 export const CHARACTERS = [
-  { id: "pip", name: "Pip", color: "var(--char-1)", shape: "round" },
-  { id: "ember", name: "Ember", color: "var(--char-2)", shape: "tall" },
-  { id: "bloop", name: "Bloop", color: "var(--char-3)", shape: "wide" },
-  { id: "sunny", name: "Sunny", color: "var(--char-4)", shape: "round" },
+  { id: "pip", name: "Pip", color: "var(--char-1)" },
+  { id: "ember", name: "Ember", color: "var(--char-2)" },
+  { id: "bloop", name: "Bloop", color: "var(--char-3)" },
+  { id: "sunny", name: "Sunny", color: "var(--char-4)" },
 ] as const;
 
 export type Settings = {
