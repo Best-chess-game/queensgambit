@@ -1,3 +1,4 @@
+import { useMoveSound } from "./useMoveSound";
 import { type Promotion } from "@/lib/game-rules";
 import { BoardPiece } from "./PieceBody";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -27,6 +28,7 @@ export function Board({
   captureSq?: string | null;
   onMove: (from: Square, to: Square, promotion?: Promotion) => void;
 }) {
+  const { play: playMoveSound, cancel: cancelMoveSound } = useMoveSound();
   const pieceElements = useRef(new Map<string, HTMLSpanElement>());
   const previousFen = useRef(fen);
   const appearance = `${flipped}-${theme}-${pieceSet}`;
@@ -39,6 +41,7 @@ export function Board({
       previousAppearance.current = appearance;
       flights.current.forEach(({ animation }) => animation.cancel());
       flights.current.clear();
+      cancelMoveSound();
       return;
     }
     if (before === fen) return;
@@ -50,7 +53,12 @@ export function Board({
       replaced.add(from);
       replaced.add(to);
       const element = pieceElements.current.get(to);
-      if (!element || !element.animate) return;
+      if (
+        !element ||
+        !element.animate ||
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      )
+        return;
       const direction = flipped ? -1 : 1;
       let dx = (from.charCodeAt(0) - to.charCodeAt(0)) * direction * 100;
       let dy = (Number(to[1]) - Number(from[1])) * direction * 100;
@@ -72,7 +80,8 @@ export function Board({
         if (flights.current.get(to)?.animation === animation) flights.current.delete(to);
       };
     };
-    if (lastMove && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (lastMove) {
       // Animate only a real move, never a reset or a freshly loaded online board.
       const placement = before.split(" ")[0] ?? "";
       const oldSquares = new Map<string, string>();
@@ -95,6 +104,7 @@ export function Board({
         (source === source.toUpperCase()) === (moved.color === "w")
       ) {
         realMove = true;
+        playMoveSound(reducedMotion ? 0 : 360, oldSquares.get(lastMove.to)?.toLowerCase() === "q");
         animate(lastMove.from, lastMove.to);
         if (
           source.toLowerCase() === "k" &&
@@ -106,12 +116,13 @@ export function Board({
         }
       }
     }
+    if (!realMove) cancelMoveSound();
     oldFlights.forEach((flight, square) => {
       if (realMove && !replaced.has(square) && game.get(square as Square))
         flights.current.set(square, flight);
       else flight.animation.cancel();
     });
-  }, [fen, flipped, game, lastMove, appearance]);
+  }, [fen, flipped, game, lastMove, appearance, playMoveSound, cancelMoveSound]);
   useEffect(
     () => () => {
       flights.current.forEach(({ animation }) => animation.cancel());
@@ -144,8 +155,24 @@ export function Board({
 
   return (
     <div
-      className={`relative theme-${theme} set-${pieceSet} rounded-2xl p-2 bg-card shadow-[0_8px_0_var(--border)] w-full max-w-[min(92vw,600px)]`}
+      className={`relative theme-${theme} set-${pieceSet} rounded-2xl p-2 pl-6 pb-6 bg-card shadow-[0_8px_0_var(--border)] w-full max-w-[min(92vw,600px)]`}
     >
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute left-1 top-2 bottom-6 grid w-4 grid-rows-8 items-center text-center text-[11px] sm:text-xs font-bold text-muted-foreground"
+      >
+        {Array.from({ length: 8 }, (_, index) => (
+          <span key={index}>{flipped ? index + 1 : 8 - index}</span>
+        ))}
+      </div>
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute bottom-1 left-6 right-2 grid h-4 grid-cols-8 items-center text-center text-[11px] sm:text-xs font-bold text-muted-foreground"
+      >
+        {[...(flipped ? [...FILES].reverse() : FILES)].map((file) => (
+          <span key={file}>{file}</span>
+        ))}
+      </div>
       <div className="grid grid-cols-8 aspect-square overflow-hidden rounded-xl">
         {rows.flatMap((row, ri) =>
           row.map((cell, ci) => {

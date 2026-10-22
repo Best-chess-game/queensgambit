@@ -1,9 +1,12 @@
+import { ColorPicker } from "@/components/chess/ColorPicker";
+import { gameWithHistory } from "@/lib/game-history";
+import { BoardWithHistory } from "@/components/chess/MoveHistory";
 import { Comments } from "@/components/chess/Comments";
 import { cleanComment, type Comment } from "@/lib/comments";
 import { resultText, type Promotion } from "@/lib/game-rules";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { Chess, type Square } from "chess.js";
+import { Chess, type Color, type Square } from "chess.js";
 import { Board } from "@/components/chess/Board";
 import { Character, type Mood } from "@/components/chess/Character";
 import { useSettings } from "@/lib/chess-settings";
@@ -36,6 +39,7 @@ type Seat = { id: string; color: "w" | "b"; token: string };
 type GameRow = {
   id: string;
   fen: string;
+  pgn?: string;
   last_from: string | null;
   last_to: string | null;
   captured: string | null;
@@ -50,6 +54,7 @@ function Online() {
   const [s] = useSettings();
   const [seat, setSeat] = useState<Seat | null>(null);
   const [name, setName] = useState("");
+  const [color, setColor] = useState<Color>("w");
   const [code, setCode] = useState("");
   const [err, setErr] = useState("");
   const [busy, setBusy] = useState(false);
@@ -96,9 +101,12 @@ function Online() {
             className="w-full rounded-xl border-2 border-border bg-card px-4 py-3"
           />
         </label>
+        <ColorPicker value={color} onChange={setColor} />
         <button
           disabled={busy || !name.trim()}
-          onClick={() => run(() => createGame({ data: { name: name.trim(), char: s.whiteChar } }))}
+          onClick={() =>
+            run(() => createGame({ data: { name: name.trim(), char: s.whiteChar, color } }))
+          }
           className="btn-chunky bg-primary text-primary-foreground shadow-[0_5px_0_var(--primary-shade)]"
         >
           Create a game
@@ -114,7 +122,7 @@ function Online() {
         <button
           disabled={busy || !name.trim() || code.length < 6}
           onClick={() =>
-            run(() => joinGame({ data: { id: code, name: name.trim(), char: s.whiteChar } }))
+            run(() => joinGame({ data: { id: code, name: name.trim(), char: s.whiteChar, color } }))
           }
           className="btn-chunky bg-secondary text-secondary-foreground shadow-[0_5px_0_var(--secondary-shade)] disabled:opacity-50"
         >
@@ -198,7 +206,7 @@ function OnlineGame({ seat, onLeave }: { seat: Seat; onLeave: () => void }) {
     };
   }, [seat.id]);
 
-  const game = useMemo(() => new Chess(row?.fen), [row?.fen]);
+  const game = useMemo(() => (row ? gameWithHistory(row.fen, row.pgn) : new Chess()), [row]);
 
   if (missing)
     return (
@@ -213,7 +221,7 @@ function OnlineGame({ seat, onLeave }: { seat: Seat; onLeave: () => void }) {
       <main className="min-h-screen grid place-items-center font-display font-bold">Loading…</main>
     );
 
-  const waiting = !row.black_name;
+  const waiting = !row.white_name || !row.black_name;
   const myTurn = game.turn() === seat.color && !waiting && !game.isGameOver();
   const mat = material(game);
 
@@ -242,7 +250,7 @@ function OnlineGame({ seat, onLeave }: { seat: Seat; onLeave: () => void }) {
 
   const Panel = ({ side }: { side: "w" | "b" }) => {
     const d = mood(side);
-    const name = side === "w" ? row.white_name : (row.black_name ?? "Waiting…");
+    const name = (side === "w" ? row.white_name : row.black_name) || "Waiting…";
     const ch = side === "w" ? row.white_char : (row.black_char ?? "ember");
     const active = game.turn() === side && !game.isGameOver();
     return (
@@ -271,7 +279,7 @@ function OnlineGame({ seat, onLeave }: { seat: Seat; onLeave: () => void }) {
         : "Opponent's move";
 
   return (
-    <main className="min-h-screen flex flex-col items-center gap-4 px-3 py-5">
+    <main className="min-h-screen flex flex-col items-center gap-4 px-3 py-5 min-[900px]:pr-[248px]">
       <div className="w-full max-w-[600px] flex items-center justify-between">
         <button onClick={onLeave} className="font-display font-bold text-muted-foreground">
           ← Leave
@@ -297,17 +305,19 @@ function OnlineGame({ seat, onLeave }: { seat: Seat; onLeave: () => void }) {
       <div className="w-full max-w-[600px]">
         <Panel side={top} />
       </div>
-      <Board
-        game={game}
-        fen={row.fen}
-        theme={s.theme}
-        pieceSet={s.pieceSet}
-        flipped={seat.color === "b"}
-        lastMove={row.last_from && row.last_to ? { from: row.last_from, to: row.last_to } : null}
-        captureSq={row.captured ? row.last_to : null}
-        disabled={!myTurn || sending}
-        onMove={onMove}
-      />
+      <BoardWithHistory game={game}>
+        <Board
+          game={game}
+          fen={row.fen}
+          theme={s.theme}
+          pieceSet={s.pieceSet}
+          flipped={seat.color === "b"}
+          lastMove={row.last_from && row.last_to ? { from: row.last_from, to: row.last_to } : null}
+          captureSq={row.captured ? row.last_to : null}
+          disabled={!myTurn || sending}
+          onMove={onMove}
+        />
+      </BoardWithHistory>
       <div className="w-full max-w-[600px]">
         <Panel side={seat.color} />
       </div>
