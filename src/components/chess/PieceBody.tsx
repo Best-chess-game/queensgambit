@@ -1,70 +1,95 @@
 import type { PieceSymbol } from "chess.js";
 
-/** A consistent Staunton-style vector set for both sides. */
+/** Original rounded vector pieces inspired by illustrated learning chess sets. */
 export function BoardPiece({ type, color }: { type: PieceSymbol; color: "w" | "b" }) {
   const white = color === "w";
-  const fill = white ? "#f8f8f8" : "#353535";
-  const line = white ? "#363636" : "#111111";
-  const detail = white ? "#777777" : "#929292";
+  const body = white ? "#fff7e8" : "#46525f";
+  const edge = white ? "#657681" : "#a0afb8";
+  const shade = white ? "#d6dfe0" : "#2b3541";
+  const light = white ? "#ffffff" : "#758490";
   return (
     <svg viewBox="0 0 100 100" className="h-[90%] w-[90%]" aria-hidden="true">
-      <g fill={fill} stroke={line} strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round">
-        {type === "p" && (
+      <ellipse cx="50" cy="90" rx={type === "p" ? 23 : 31} ry="5" fill="#101d2a" opacity=".18" />
+      <g stroke={edge} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+        {type === "p" ? (
           <>
-            <path d="M35 72Q43 57 39 49Q28 42 34 32Q37 26 43 25Q36 11 50 10Q64 11 57 25Q68 28 68 38Q68 45 61 49Q57 57 65 72Z" />
-            <path d="M32 72H68L75 83H25Z" />
+            <path d="M40 43C39 57 27 65 27 76C27 93 73 93 73 76C73 65 61 57 60 43Z" fill={body} />
+            <path d="M30 77Q50 89 70 77" fill="none" stroke={shade} strokeWidth="7" />
+            <circle cx="50" cy="31" r="18" fill={body} />
+            <ellipse cx="44" cy="25" rx="6" ry="5" fill={light} stroke="none" />
           </>
-        )}
-        {type === "r" && (
+        ) : (
           <>
-            <path d="M25 17H36V29H44V17H56V29H64V17H75V39L66 47V71H34V47L25 39Z" />
-            <path d="M30 72H70L76 83H24Z" />
-            <path d="M31 40H69M35 48H65" fill="none" stroke={detail} />
-          </>
-        )}
-        {type === "b" && (
-          <>
-            <circle cx="50" cy="12" r="5" />
-            <path d="M50 18Q24 34 32 47Q36 54 43 55Q42 64 34 73H66Q58 64 57 55Q68 52 70 43Q72 33 50 18Z" />
-            <path d="M52 27L61 40M37 54H63" fill="none" stroke={detail} strokeWidth="3" />
-            <path d="M29 73Q50 66 71 73L77 83H23Z" />
-          </>
-        )}
-        {type === "n" && (
-          <>
-            <path d="M28 76Q31 62 49 51L39 44L29 51L17 43L21 34L39 20L40 9L51 17L62 14Q83 30 77 76Z" />
             <path
-              d="M62 24Q74 46 63 67M24 41L31 40M44 24L39 29"
-              fill="none"
-              stroke={detail}
-              strokeWidth="3"
+              d="M31 65Q31 73 23 78Q18 82 21 87Q24 92 50 92Q76 92 79 87Q82 82 77 78Q69 73 69 65Z"
+              fill={body}
             />
-            <path d="M28 76H75L80 83H23Z" />
+            <path d="M26 82Q50 88 74 82" stroke={shade} strokeWidth="6" fill="none" />
+            {type === "r" && (
+              <>
+                <path d="M31 36H69L66 72Q50 80 34 72Z" fill={body} />
+                <path
+                  d="M23 17Q23 13 27 13H37V27H44V13H56V27H63V13H73Q77 13 77 17V40Q77 49 68 50H32Q23 49 23 40Z"
+                  fill={body}
+                />
+                <path
+                  d="M31 41Q50 46 69 41M38 69Q50 73 62 69"
+                  stroke={shade}
+                  strokeWidth="5"
+                  fill="none"
+                />
+                <path d="M29 20V31" stroke={light} strokeWidth="4" />
+              </>
+            )}
+            {type === "n" && (
+              <>
+                <path
+                  d="M30 74Q32 61 47 50L39 43L29 50Q24 53 20 49L14 42Q11 38 16 34L35 20L35 10Q35 7 39 10L48 17Q61 12 70 24Q84 42 74 73Q53 80 30 74Z"
+                  fill={body}
+                />
+                <path d="M62 26Q73 42 64 66" stroke={shade} strokeWidth="7" fill="none" />
+                <path d="M23 39L30 36M40 24L35 29" stroke={edge} strokeWidth="3" fill="none" />
+                <path d="M48 23Q55 21 59 25" stroke={light} strokeWidth="4" fill="none" />
+              </>
+            )}
+            {type === "b" && (
+              <>
+                <path d="M41 51Q42 62 33 72Q50 79 67 72Q58 62 59 51Z" fill={body} />
+                <path
+                  d="M50 17C42 23 26 34 27 46C28 60 41 64 50 64C65 64 75 55 73 43L59 50L53 44L67 32Z"
+                  fill={body}
+                />
+                <circle cx="50" cy="14" r="6" fill={body} />
+                <path d="M38 38L46 29" stroke={light} strokeWidth="6" fill="none" />
+                <path d="M36 54Q50 62 64 53" stroke={shade} strokeWidth="5" fill="none" />
+              </>
+            )}
+            {type === "q" && (
+              <>
+                <path d="M35 49Q39 61 31 72Q50 80 69 72Q61 61 65 49Z" fill={body} />
+                <path
+                  d="M22 28L34 35L37 19L47 29L50 12L57 29L68 19L68 35L80 28L69 55Q50 63 31 55Z"
+                  fill={body}
+                />
+                <path d="M34 46Q50 39 66 46" stroke={shade} strokeWidth="6" fill="none" />
+                <circle cx="50" cy="66" r="5" fill={light} stroke="none" />
+                <path d="M31 31L35 38" stroke={light} strokeWidth="4" fill="none" />
+              </>
+            )}
+            {type === "k" && (
+              <>
+                <path d="M35 49Q39 61 31 72Q50 80 69 72Q61 61 65 49Z" fill={body} />
+                <path
+                  d="M50 31Q31 20 24 34Q17 47 33 58Q50 66 67 58Q83 47 76 34Q69 20 50 31Z"
+                  fill={body}
+                />
+                <path d="M45 9H55V18H64V27H55V36H45V27H36V18H45Z" fill={body} />
+                <path d="M35 51Q50 59 65 51" stroke={shade} strokeWidth="6" fill="none" />
+                <path d="M29 38Q28 42 31 45" stroke={light} strokeWidth="4" fill="none" />
+              </>
+            )}
           </>
         )}
-        {type === "q" && (
-          <>
-            <path d="M22 27L34 40L39 23L50 39L61 23L66 40L78 27L68 59H32Z" />
-            <g>
-              <circle cx="21" cy="22" r="5" />
-              <circle cx="38" cy="18" r="5" />
-              <circle cx="50" cy="12" r="5" />
-              <circle cx="62" cy="18" r="5" />
-              <circle cx="79" cy="22" r="5" />
-            </g>
-            <path d="M33 59H67L63 68L73 80H27L37 68Z" />
-            <path d="M35 63H65M34 74H66" stroke={detail} fill="none" />
-          </>
-        )}
-        {type === "k" && (
-          <>
-            <path d="M46 7H54V15H62V22H54V32H46V22H38V15H46Z" />
-            <path d="M50 36Q34 23 25 36Q19 46 34 58L38 67L29 80H71L62 67L66 58Q81 46 75 36Q66 23 50 36Z" />
-            <path d="M50 37V56M35 58H65M38 67H62M34 74H66" fill="none" stroke={detail} />
-          </>
-        )}
-        <path d="M25 83H75L80 91H20Z" />
-        <path d="M28 86H72" fill="none" stroke={detail} strokeWidth="1.5" />
       </g>
     </svg>
   );
