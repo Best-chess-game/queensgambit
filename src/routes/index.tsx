@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { Chess, type Square } from "chess.js";
 import { Board } from "@/components/chess/Board";
 import { Character, type Mood } from "@/components/chess/Character";
+import { MenuBackdrop } from "@/components/chess/Backdrop";
 import { useSettings } from "@/lib/chess-settings";
 import { isHanging, material, pickBotMove, VALUE } from "@/lib/chess-ai";
 
@@ -36,13 +37,15 @@ function Index() {
 function Menu({ onPick }: { onPick: (m: Mode) => void }) {
   const [s] = useSettings();
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center gap-8 px-4 py-10">
+    <>
+      <MenuBackdrop />
+      <main className="relative z-10 min-h-screen flex flex-col items-center justify-center gap-8 px-4 py-10">
       <div className="flex items-end gap-2">
         <Character id={s.whiteChar} mood="happy" size={110} />
         <Character id={s.blackChar} mood="neutral" size={110} />
       </div>
       <div className="text-center">
-        <h1 className="text-5xl md:text-6xl font-bold text-primary-shade">Chess Buddies</h1>
+        <h1 className="wall-title text-5xl md:text-6xl font-bold text-primary-shade">Chess Buddies</h1>
         <p className="mt-2 text-lg text-muted-foreground">Chess with friends who have feelings.</p>
       </div>
       <div className="flex flex-col gap-4 w-full max-w-xs">
@@ -53,6 +56,7 @@ function Menu({ onPick }: { onPick: (m: Mode) => void }) {
       </div>
       <p className="text-sm text-muted-foreground">Offline modes work without internet · Online needs a connection</p>
     </main>
+    </>
   );
 }
 
