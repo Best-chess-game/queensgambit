@@ -48,9 +48,10 @@ function Menu({ onPick }: { onPick: (m: Mode) => void }) {
       <div className="flex flex-col gap-4 w-full max-w-xs">
         <button onClick={() => onPick("local")} className="btn-chunky bg-primary text-primary-foreground shadow-[0_5px_0_var(--primary-shade)]">Play a friend</button>
         <button onClick={() => onPick("bot")} className="btn-chunky bg-secondary text-secondary-foreground shadow-[0_5px_0_var(--secondary-shade)]">Play the computer</button>
+        <Link to="/online" className="btn-chunky text-center bg-accent text-accent-foreground shadow-[0_5px_0_var(--border)]">Play online</Link>
         <Link to="/settings" className="btn-chunky text-center bg-card text-foreground border-2 border-border shadow-[0_5px_0_var(--border)]">Settings</Link>
       </div>
-      <p className="text-sm text-muted-foreground">Works offline · Online matches coming next</p>
+      <p className="text-sm text-muted-foreground">Offline modes work without internet · Online needs a connection</p>
     </main>
   );
 }
