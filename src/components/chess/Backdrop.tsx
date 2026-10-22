@@ -21,8 +21,8 @@ const PIECES = [
   { g: "♝", top: "66%", left: "84%", size: 72, dur: 12, dl: 2.1, r: "-8deg" },
   { g: "♟", top: "44%", left: "2%", size: 46, dur: 7.5, dl: 1.7, r: "14deg" },
   { g: "♘", top: "6%", left: "58%", size: 58, dur: 10, dl: 2.6, r: "6deg" },
-  { g: "♕", top: "82%", left: "38%", size: 54, dur: 13, dl: 0.4, r: "-14deg" },
-  { g: "♟", top: "86%", left: "70%", size: 42, dur: 9, dl: 3.1, r: "10deg" },
+  { g: "♕", top: "74%", left: "17%", size: 54, dur: 13, dl: 0.4, r: "-14deg" },
+  { g: "♟", top: "80%", left: "88%", size: 42, dur: 9, dl: 3.1, r: "10deg" },
 ];
 
 export function MenuBackdrop() {

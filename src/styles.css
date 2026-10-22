@@ -224,22 +224,25 @@
 
 .wall-floor {
   position: absolute;
-  left: -30%;
-  right: -30%;
-  bottom: -14%;
-  height: 58%;
-  perspective: 340px;
+  left: -20%;
+  right: -20%;
+  bottom: -10%;
+  height: 62%;
+  perspective: 520px;
   perspective-origin: 50% 0%;
-  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 30%, #000 100%);
-  mask-image: linear-gradient(180deg, transparent 0%, #000 30%, #000 100%);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 26%, #000 100%);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 26%, #000 100%);
 }
 .wall-board {
   position: absolute;
-  inset: -70% -25% -40%;
-  transform: rotateX(63deg);
+  left: -80%;
+  right: -80%;
+  top: 0;
+  height: 320%;
+  transform: rotateX(-58deg);
   transform-origin: 50% 0%;
   background-image: repeating-conic-gradient(var(--wall-sq-b) 0% 25%, var(--wall-sq-a) 0% 50%);
-  background-size: 120px 120px;
+  background-size: 150px 150px;
 }
 
 .wall-piece {
