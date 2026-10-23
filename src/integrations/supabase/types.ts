@@ -46,7 +46,6 @@ export type Database = {
           black_name: string | null
           captured: string | null
           created_at: string
-          pgn: string
           fen: string
           id: string
           last_from: string | null
@@ -60,7 +59,6 @@ export type Database = {
           black_name?: string | null
           captured?: string | null
           created_at?: string
-          pgn?: string
           fen?: string
           id: string
           last_from?: string | null
@@ -74,7 +72,6 @@ export type Database = {
           black_name?: string | null
           captured?: string | null
           created_at?: string
-          pgn?: string
           fen?: string
           id?: string
           last_from?: string | null
