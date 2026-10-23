@@ -44,7 +44,7 @@ export const DEFAULT_LOOK = "00000";
 export function parseLook(look: string | undefined) {
   const d = (i: number) => {
     const n = Number((look ?? "")[i]);
-    return Number.isFinite(n) && n < LOOK_PARTS[i].options.length ? n : 0;
+    return Number.isFinite(n) && n < (LOOK_PARTS[i]?.options.length ?? 0) ? n : 0;
   };
   return { hair: d(0), eyes: d(1), clothes: d(2), hat: d(3), color: d(4) };
 }
