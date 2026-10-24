@@ -41,8 +41,8 @@ function Menu({ onPick }: { onPick: (m: Mode) => void }) {
       <MenuBackdrop />
       <main className="relative z-10 min-h-screen flex flex-col items-center justify-center gap-8 px-4 py-10">
       <div className="flex items-end gap-2">
-        <Character id={s.whiteChar} mood="happy" size={110} />
-        <Character id={s.blackChar} mood="neutral" size={110} />
+        <Character id={s.whiteChar} mood="happy" size={110} look={s.whiteLook} />
+        <Character id={s.blackChar} mood="neutral" size={110} look={s.blackLook} />
       </div>
       <div className="text-center">
         <h1 className="wall-title text-5xl md:text-6xl font-bold text-primary-shade">Chess Buddies</h1>
@@ -125,7 +125,7 @@ function Game({ mode, onExit }: { mode: Exclude<Mode, "menu">; onExit: () => voi
     const active = game.turn() === side && !over;
     return (
       <div className={`flex items-center gap-3 rounded-2xl p-3 bg-card border-2 transition-colors ${active ? "border-primary" : "border-border"}`}>
-        <Character id={side === "w" ? s.whiteChar : s.blackChar} mood={d.mood} animKey={d.k} size={72} />
+        <Character id={side === "w" ? s.whiteChar : s.blackChar} mood={d.mood} animKey={d.k} size={72} look={side === "w" ? s.whiteLook : s.blackLook} />
         <div className="flex-1 min-w-0">
           <div className="font-display font-bold text-lg flex items-center gap-2">
             {name} {adv > 0 && <span className="text-sm rounded-full bg-accent text-accent-foreground px-2">+{adv}</span>}
