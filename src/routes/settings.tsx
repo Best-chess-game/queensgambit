@@ -82,7 +82,7 @@ function SettingsPage() {
                 const on = (side === "w" ? s.whiteChar : s.blackChar) === c.id;
                 return (
                   <button key={c.id} onClick={() => update(side === "w" ? { whiteChar: c.id } : { blackChar: c.id })} className={`${card(on)} flex flex-col items-center`}>
-                    <Character id={c.id} mood={on ? "happy" : "neutral"} size={64} look={on ? look : undefined} />
+                    <Character id={c.id} mood={on ? "happy" : "neutral"} size={64} look={on ? look : ""} />
                     <div className="font-display font-bold">{c.name}</div>
                   </button>
                 );
