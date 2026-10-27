@@ -68,11 +68,6 @@ function SettingsPage() {
       {(["w", "b"] as const).map((side) => (
         <section key={side}>
           <h2 className="text-2xl font-bold mb-3">{side === "w" ? "White" : "Black"} player</h2>
-          <input
-            value={side === "w" ? s.whiteName : s.blackName}
-            onChange={(e) => update(side === "w" ? { whiteName: e.target.value } : { blackName: e.target.value })}
-            className="mb-3 w-full max-w-xs rounded-xl border-2 border-input bg-card px-3 py-2 font-semibold"
-          />
           <div className="grid grid-cols-4 gap-3">
             {CHARACTERS.map((c) => {
               const on = (side === "w" ? s.whiteChar : s.blackChar) === c.id;
