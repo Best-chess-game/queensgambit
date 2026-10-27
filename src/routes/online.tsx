@@ -51,12 +51,12 @@ function Online() {
       <Character id={s.whiteChar} mood="happy" size={100} />
       <h1 className="text-4xl font-bold text-primary-shade">Play Online</h1>
       <div className="flex flex-col gap-4 w-full max-w-xs">
-        <button disabled={busy} onClick={() => run(() => createGame({ data: { name: s.whiteName, char: s.whiteChar } }))}
+        <button disabled={busy} onClick={() => run(() => createGame({ data: { char: s.whiteChar } }))}
           className="btn-chunky bg-primary text-primary-foreground shadow-[0_5px_0_var(--primary-shade)]">Create a game</button>
         <div className="text-center text-muted-foreground font-semibold">or join with a code</div>
         <input value={code} onChange={(e) => setCode(e.target.value.toUpperCase())} placeholder="ABC123" maxLength={6}
           className="rounded-xl border-2 border-border bg-card px-4 py-3 text-center text-2xl font-bold tracking-widest" />
-        <button disabled={busy || code.length < 6} onClick={() => run(() => joinGame({ data: { id: code, name: s.whiteName, char: s.whiteChar } }))}
+        <button disabled={busy || code.length < 6} onClick={() => run(() => joinGame({ data: { id: code, char: s.whiteChar } }))}
           className="btn-chunky bg-secondary text-secondary-foreground shadow-[0_5px_0_var(--secondary-shade)] disabled:opacity-50">Join game</button>
         {err && <p className="text-center text-destructive font-semibold">{err}</p>}
         <Link to="/" className="text-center font-display font-bold text-muted-foreground">← Menu</Link>
@@ -110,7 +110,7 @@ function OnlineGame({ seat, onLeave }: { seat: Seat; onLeave: () => void }) {
 
   const Panel = ({ side }: { side: "w" | "b" }) => {
     const d = mood(side);
-    const name = side === "w" ? row.white_name : row.black_name ?? "Waiting…";
+    const name = side === "w" ? "White" : row.black_name ? "Black" : "Waiting…";
     const ch = side === "w" ? row.white_char : row.black_char ?? "ember";
     const active = game.turn() === side && !game.isGameOver();
     return (
