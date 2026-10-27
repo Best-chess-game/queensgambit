@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Chess, type Square } from "chess.js";
 import { Board } from "@/components/chess/Board";
 import { Character, type Mood } from "@/components/chess/Character";
-import { charCode, useSettings } from "@/lib/chess-settings";
+import { useSettings } from "@/lib/chess-settings";
 import { supabase } from "@/integrations/supabase/client";
 import { createGame, joinGame, playMove } from "@/lib/online.functions";
 import { material } from "@/lib/chess-ai";
@@ -48,15 +48,15 @@ function Online() {
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center gap-6 px-4 py-10">
-      <Character id={s.whiteChar} mood="happy" size={100} look={s.whiteLook} />
+      <Character id={s.whiteChar} mood="happy" size={100} />
       <h1 className="text-4xl font-bold text-primary-shade">Play Online</h1>
       <div className="flex flex-col gap-4 w-full max-w-xs">
-        <button disabled={busy} onClick={() => run(() => createGame({ data: { name: s.whiteName, char: charCode(s.whiteChar, s.whiteLook) } }))}
+        <button disabled={busy} onClick={() => run(() => createGame({ data: { name: s.whiteName, char: s.whiteChar } }))}
           className="btn-chunky bg-primary text-primary-foreground shadow-[0_5px_0_var(--primary-shade)]">Create a game</button>
         <div className="text-center text-muted-foreground font-semibold">or join with a code</div>
         <input value={code} onChange={(e) => setCode(e.target.value.toUpperCase())} placeholder="ABC123" maxLength={6}
           className="rounded-xl border-2 border-border bg-card px-4 py-3 text-center text-2xl font-bold tracking-widest" />
-        <button disabled={busy || code.length < 6} onClick={() => run(() => joinGame({ data: { id: code, name: s.whiteName, char: charCode(s.whiteChar, s.whiteLook) } }))}
+        <button disabled={busy || code.length < 6} onClick={() => run(() => joinGame({ data: { id: code, name: s.whiteName, char: s.whiteChar } }))}
           className="btn-chunky bg-secondary text-secondary-foreground shadow-[0_5px_0_var(--secondary-shade)] disabled:opacity-50">Join game</button>
         {err && <p className="text-center text-destructive font-semibold">{err}</p>}
         <Link to="/" className="text-center font-display font-bold text-muted-foreground">← Menu</Link>
