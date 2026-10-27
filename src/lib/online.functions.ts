@@ -26,7 +26,7 @@ async function seatBlack(id: string, w: Who) {
   const { error } = await db.from("game_seats").insert({ game_id: id, color: "b", token: t });
   if (error) return null;
   const { data: dup } = await db.from("game_seats").select("token").eq("game_id", id).eq("color", "b");
-  if ((dup?.length ?? 0) > 1 && dup![0].token !== t) {
+  if ((dup?.length ?? 0) > 1 && dup?.[0]?.token !== t) {
     await db.from("game_seats").delete().eq("game_id", id).eq("token", t);
     return null;
   }
@@ -51,7 +51,7 @@ export const joinGame = createServerFn({ method: "POST" })
 
 /** Pair with someone else waiting, or open a new waiting game. */
 export const findMatch = createServerFn({ method: "POST" })
-  .inputValidator((d: { char: string; name: string; mine?: string; token?: string }) => ({ w: who(d), mine: clean(d.mine, 8), token: clean(d.token, 64) }))
+  .inputValidator((d: { char: string; name: string; mine?: string | undefined; token?: string | undefined }) => ({ w: who(d), mine: clean(d.mine, 8), token: clean(d.token, 64) }))
   .handler(async ({ data }) => {
     const db = await admin();
     const fresh = new Date(Date.now() - 15_000).toISOString();

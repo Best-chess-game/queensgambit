@@ -96,7 +96,7 @@ export function Character({
   const anim = mood === "happy" ? "anim-happy" : mood === "sad" ? "anim-sad" : "anim-idle";
   const robot = c.id === "robot";
   const eyeY = c.id === "frog" ? 30 : 47;
-  const eyeX = c.id === "frog" ? [32, 68] : [37, 63];
+  const eyeX: [number, number] = c.id === "frog" ? [32, 68] : [37, 63];
   const pupilY = eyeY + (mood === "sad" ? 3 : mood === "thinking" ? -4 : 1);
   const px = mood === "thinking" ? 3 : 0;
   const pupil = robot ? "var(--char-robot)" : c.id === "panda" ? CREAM : INK;

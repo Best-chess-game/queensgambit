@@ -19,7 +19,7 @@ export const Route = createFileRoute("/online")({
       { name: "twitter:card", content: "summary" },
     ],
   }),
-  validateSearch: (q: Record<string, unknown>): { mode: "friend" | "random" } => ({ mode: q.mode === "friend" ? "friend" : "random" }),
+  validateSearch: (q: Record<string, unknown>): { mode: "friend" | "random" } => ({ mode: q["mode"] === "friend" ? "friend" : "random" }),
   component: Online,
 });
 
