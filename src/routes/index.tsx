@@ -114,13 +114,13 @@ function Game({ mode, onExit }: { mode: Exclude<Mode, "menu">; onExit: () => voi
 
   const over = game.isGameOver();
   const status = game.isCheckmate()
-    ? `Checkmate — ${game.turn() === "w" ? (mode === "bot" ? "Computer" : s.blackName) : s.whiteName} wins!`
-    : game.isDraw() ? "Draw!" : `${game.turn() === "w" ? s.whiteName : mode === "bot" ? "Computer" : s.blackName} to move`;
+    ? `Checkmate — ${game.turn() === "w" ? (mode === "bot" ? "Computer" : "Player 2") : "Player 1"} wins!`
+    : game.isDraw() ? "Draw!" : `${game.turn() === "w" ? "Player 1" : mode === "bot" ? "Computer" : "Player 2"} to move`;
   const mat = material(game);
 
   const Panel = ({ side }: { side: "w" | "b" }) => {
     const d = sides[side];
-    const name = side === "w" ? s.whiteName : mode === "bot" ? "Computer" : s.blackName;
+    const name = side === "w" ? "Player 1" : mode === "bot" ? "Computer" : "Player 2";
     const adv = side === "w" ? mat.w - mat.b : mat.b - mat.w;
     const active = game.turn() === side && !over;
     return (
