@@ -19,10 +19,10 @@ export const PIECE_SETS = [
 ] as const;
 
 export const CHARACTERS = [
-  { id: "pip", name: "Olive", color: "var(--char-1)", shape: "round" },
-  { id: "ember", name: "Ruby", color: "var(--char-2)", shape: "tall" },
-  { id: "bloop", name: "Marina", color: "var(--char-3)", shape: "wide" },
-  { id: "sunny", name: "Sunny", color: "var(--char-4)", shape: "round" },
+  { id: "pip", name: "Olive", skin: "oklch(0.85 0.07 80)", hair: "oklch(0.4 0.08 60)", shirt: "var(--char-1)" },
+  { id: "ember", name: "Ruby", skin: "oklch(0.72 0.09 65)", hair: "oklch(0.3 0.04 60)", shirt: "var(--char-2)" },
+  { id: "bloop", name: "Marina", skin: "oklch(0.88 0.06 85)", hair: "oklch(0.75 0.12 85)", shirt: "var(--char-3)" },
+  { id: "sunny", name: "Sunny", skin: "oklch(0.6 0.09 60)", hair: "oklch(0.28 0.05 50)", shirt: "var(--char-4)" },
 ] as const;
 
 /** Customisation options. A look is stored as 5 digits: hair, eyes, clothes, hat, colour. */
@@ -31,12 +31,12 @@ export const LOOK_PARTS = [
   { key: "eyes", label: "Eyes", options: ["Round", "Sparkly", "Sleepy", "Glasses"] },
   { key: "clothes", label: "Clothes", options: ["None", "T-shirt", "Bow tie", "Scarf", "Hoodie"] },
   { key: "hat", label: "Extras", options: ["None", "Crown", "Cap", "Flower", "Headphones"] },
-  { key: "color", label: "Colour", options: ["Default", "Pink", "Purple", "Teal", "Orange", "Mint", "Grey"] },
+  { key: "color", label: "Skin tone", options: ["Default", "Light", "Fair", "Tan", "Brown", "Dark", "Deep"] },
 ] as const;
 
 export const LOOK_COLORS = [
-  "", "oklch(0.78 0.15 350)", "oklch(0.65 0.18 300)", "oklch(0.7 0.12 195)",
-  "oklch(0.75 0.17 55)", "oklch(0.85 0.12 160)", "oklch(0.7 0.02 250)",
+  "", "oklch(0.9 0.05 85)", "oklch(0.85 0.07 80)", "oklch(0.76 0.08 70)",
+  "oklch(0.65 0.09 60)", "oklch(0.52 0.08 55)", "oklch(0.42 0.06 50)",
 ];
 
 export const DEFAULT_LOOK = "00000";
