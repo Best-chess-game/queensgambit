@@ -36,26 +36,37 @@ function Index() {
 
 function Menu({ onPick }: { onPick: (m: Mode) => void }) {
   const [s] = useSettings();
+  const [friend, setFriend] = useState(false);
   return (
     <>
       <MenuBackdrop />
-      <main className="relative z-10 min-h-screen flex flex-col items-center justify-center gap-8 px-4 py-10">
-      <div className="flex items-end gap-2">
-        <Character id={s.whiteChar} mood="happy" size={110} />
-        <Character id={s.blackChar} mood="neutral" size={110} />
-      </div>
-      <div className="text-center">
-        <h1 className="wall-title text-5xl md:text-6xl font-bold text-primary-shade">Chess Buddies</h1>
-        <p className="mt-2 text-lg text-muted-foreground">Chess with friends who have feelings.</p>
-      </div>
-      <div className="flex flex-col gap-4 w-full max-w-xs">
-        <button onClick={() => onPick("local")} className="btn-chunky bg-primary text-primary-foreground shadow-[0_5px_0_var(--primary-shade)]">Play a friend</button>
-        <button onClick={() => onPick("bot")} className="btn-chunky bg-secondary text-secondary-foreground shadow-[0_5px_0_var(--secondary-shade)]">Play the computer</button>
-        <Link to="/online" className="btn-chunky text-center bg-accent text-accent-foreground shadow-[0_5px_0_var(--border)]">Play online</Link>
-        <Link to="/settings" className="btn-chunky text-center bg-card text-foreground border-2 border-border shadow-[0_5px_0_var(--border)]">Settings</Link>
-      </div>
-      <p className="text-sm text-muted-foreground">Offline modes work without internet · Online needs a connection</p>
-    </main>
+      <main className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 py-10">
+        <div className="menu-card w-full max-w-md rounded-[2rem] px-6 pt-8 pb-6 flex flex-col items-center gap-6">
+          <div className="flex items-end gap-1 -mt-20">
+            <Character id={s.whiteChar} mood="happy" size={110} />
+            <span className="font-display font-bold text-2xl text-muted-foreground pb-8">vs</span>
+            <Character id={s.blackChar} mood="thinking" size={110} />
+          </div>
+          <div className="text-center">
+            <h1 className="wall-title text-5xl md:text-6xl font-bold text-primary-shade">Chess Buddies</h1>
+            <p className="mt-2 text-lg text-muted-foreground">Hi {s.whiteName || "there"}! Ready to play?</p>
+          </div>
+          {friend ? (
+            <div className="flex flex-col gap-3 w-full">
+              <button onClick={() => onPick("local")} className="btn-chunky bg-primary text-primary-foreground shadow-[0_5px_0_var(--primary-shade)]">📱 Same device</button>
+              <Link to="/online" search={{ mode: "friend" }} className="btn-chunky text-center bg-secondary text-secondary-foreground shadow-[0_5px_0_var(--secondary-shade)]">🔑 With a code</Link>
+              <button onClick={() => setFriend(false)} className="font-display font-bold text-muted-foreground">← Back</button>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-3 w-full">
+              <button onClick={() => setFriend(true)} className="btn-chunky bg-primary text-primary-foreground shadow-[0_5px_0_var(--primary-shade)]">👫 Play a friend</button>
+              <Link to="/online" search={{ mode: "random" }} className="btn-chunky text-center bg-secondary text-secondary-foreground shadow-[0_5px_0_var(--secondary-shade)]">🌍 Play online</Link>
+              <button onClick={() => onPick("bot")} className="btn-chunky bg-accent text-accent-foreground shadow-[0_5px_0_var(--border)]">🤖 Play the computer</button>
+              <Link to="/settings" className="btn-chunky text-center bg-card text-foreground border-2 border-border shadow-[0_5px_0_var(--border)]">⚙️ Settings</Link>
+            </div>
+          )}
+        </div>
+      </main>
     </>
   );
 }
@@ -114,13 +125,13 @@ function Game({ mode, onExit }: { mode: Exclude<Mode, "menu">; onExit: () => voi
 
   const over = game.isGameOver();
   const status = game.isCheckmate()
-    ? `Checkmate — ${game.turn() === "w" ? (mode === "bot" ? "Computer" : "Player 2") : "Player 1"} wins!`
-    : game.isDraw() ? "Draw!" : `${game.turn() === "w" ? "Player 1" : mode === "bot" ? "Computer" : "Player 2"} to move`;
+    ? `Checkmate — ${game.turn() === "w" ? (mode === "bot" ? "Computer" : s.blackName || "Player 2") : s.whiteName || "Player 1"} wins!`
+    : game.isDraw() ? "Draw!" : `${game.turn() === "w" ? s.whiteName || "Player 1" : mode === "bot" ? "Computer" : s.blackName || "Player 2"} to move`;
   const mat = material(game);
 
   const Panel = ({ side }: { side: "w" | "b" }) => {
     const d = sides[side];
-    const name = side === "w" ? "Player 1" : mode === "bot" ? "Computer" : "Player 2";
+    const name = side === "w" ? s.whiteName || "Player 1" : mode === "bot" ? "Computer" : s.blackName || "Player 2";
     const adv = side === "w" ? mat.w - mat.b : mat.b - mat.w;
     const active = game.turn() === side && !over;
     return (

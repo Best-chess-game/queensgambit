@@ -19,10 +19,12 @@ export const PIECE_SETS = [
 ] as const;
 
 export const CHARACTERS = [
-  { id: "pip", name: "Pip", color: "var(--char-1)", shape: "round" },
-  { id: "ember", name: "Ember", color: "var(--char-2)", shape: "tall" },
-  { id: "bloop", name: "Bloop", color: "var(--char-3)", shape: "wide" },
-  { id: "sunny", name: "Sunny", color: "var(--char-4)", shape: "round" },
+  { id: "fox", name: "Fox" },
+  { id: "owl", name: "Owl" },
+  { id: "cat", name: "Cat" },
+  { id: "frog", name: "Frog" },
+  { id: "panda", name: "Panda" },
+  { id: "robot", name: "Robot" },
 ] as const;
 
 export type Settings = {
@@ -30,13 +32,17 @@ export type Settings = {
   pieceSet: string;
   whiteChar: string;
   blackChar: string;
+  whiteName: string;
+  blackName: string;
 };
 
 const DEFAULT: Settings = {
   theme: "classic",
   pieceSet: "classic",
-  whiteChar: "pip",
-  blackChar: "ember",
+  whiteChar: "fox",
+  blackChar: "owl",
+  whiteName: "Player 1",
+  blackName: "Player 2",
 };
 const KEY = "chess-buddies-settings";
 
@@ -45,7 +51,13 @@ export function useSettings() {
   useEffect(() => {
     try {
       const raw = localStorage.getItem(KEY);
-      if (raw) setS({ ...DEFAULT, ...JSON.parse(raw) });
+      if (raw) {
+        const v = { ...DEFAULT, ...JSON.parse(raw) };
+        const ok = (id: string) => CHARACTERS.some((c) => c.id === id);
+        if (!ok(v.whiteChar)) v.whiteChar = DEFAULT.whiteChar;
+        if (!ok(v.blackChar)) v.blackChar = DEFAULT.blackChar;
+        setS(v);
+      }
     } catch {}
   }, []);
   const update = (p: Partial<Settings>) =>
