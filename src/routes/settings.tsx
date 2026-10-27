@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { BOARD_THEMES, CHARACTERS, PIECE_SETS, useSettings } from "@/lib/chess-settings";
+import { BOARD_THEMES, CHARACTERS, LOOK_PARTS, PIECE_SETS, setLookPart, useSettings } from "@/lib/chess-settings";
 import { Character } from "@/components/chess/Character";
 
 export const Route = createFileRoute("/settings")({
@@ -65,27 +65,58 @@ function SettingsPage() {
         </div>
       </section>
 
-      {(["w", "b"] as const).map((side) => (
-        <section key={side}>
-          <h2 className="text-2xl font-bold mb-3">{side === "w" ? "White" : "Black"} player</h2>
-          <input
-            value={side === "w" ? s.whiteName : s.blackName}
-            onChange={(e) => update(side === "w" ? { whiteName: e.target.value } : { blackName: e.target.value })}
-            className="mb-3 w-full max-w-xs rounded-xl border-2 border-input bg-card px-3 py-2 font-semibold"
-          />
-          <div className="grid grid-cols-4 gap-3">
-            {CHARACTERS.map((c) => {
-              const on = (side === "w" ? s.whiteChar : s.blackChar) === c.id;
-              return (
-                <button key={c.id} onClick={() => update(side === "w" ? { whiteChar: c.id } : { blackChar: c.id })} className={`${card(on)} flex flex-col items-center`}>
-                  <Character id={c.id} mood={on ? "happy" : "neutral"} size={64} />
-                  <div className="font-display font-bold">{c.name}</div>
-                </button>
-              );
-            })}
-          </div>
-        </section>
-      ))}
+      {(["w", "b"] as const).map((side) => {
+        const look = side === "w" ? s.whiteLook : s.blackLook;
+        const setLook = (i: number, v: number) =>
+          update(side === "w" ? { whiteLook: setLookPart(look, i, v) } : { blackLook: setLookPart(look, i, v) });
+        return (
+          <section key={side}>
+            <h2 className="text-2xl font-bold mb-3">{side === "w" ? "White" : "Black"} player</h2>
+            <input
+              value={side === "w" ? s.whiteName : s.blackName}
+              onChange={(e) => update(side === "w" ? { whiteName: e.target.value } : { blackName: e.target.value })}
+              className="mb-3 w-full max-w-xs rounded-xl border-2 border-input bg-card px-3 py-2 font-semibold"
+            />
+            <div className="grid grid-cols-4 gap-3">
+              {CHARACTERS.map((c) => {
+                const on = (side === "w" ? s.whiteChar : s.blackChar) === c.id;
+                return (
+                  <button key={c.id} onClick={() => update(side === "w" ? { whiteChar: c.id } : { blackChar: c.id })} className={`${card(on)} flex flex-col items-center`}>
+                    <Character id={c.id} mood={on ? "happy" : "neutral"} size={64} look={on ? look : ""} />
+                    <div className="font-display font-bold">{c.name}</div>
+                  </button>
+                );
+              })}
+            </div>
+            <div className="mt-4 rounded-2xl border-2 border-border bg-card p-4 shadow-[0_4px_0_var(--border)]">
+              <div className="flex items-center gap-4">
+                <Character id={side === "w" ? s.whiteChar : s.blackChar} mood="happy" size={88} look={look} />
+                <div className="font-display font-bold text-lg">Dress them up!</div>
+              </div>
+              {LOOK_PARTS.map((part, pi) => (
+                <div key={part.key} className="mt-3">
+                  <div className="text-sm font-bold text-muted-foreground mb-1">{part.label}</div>
+                  <div className="flex flex-wrap gap-2">
+                    {part.options.map((opt, oi) => (
+                      <button
+                        key={opt}
+                        onClick={() => setLook(pi, oi)}
+                        className={`rounded-full border-2 px-3 py-1 text-sm font-semibold transition-transform hover:-translate-y-0.5 ${
+                          Number(look[pi] ?? 0) === oi
+                            ? "border-primary bg-primary text-primary-foreground"
+                            : "border-border bg-muted"
+                        }`}
+                      >
+                        {opt}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        );
+      })}
     </main>
   );
 }
