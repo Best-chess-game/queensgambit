@@ -68,13 +68,15 @@ function SettingsPage() {
       {(["w", "b"] as const).map((side) => (
         <section key={side}>
           <h2 className="text-2xl font-bold mb-3">{side === "w" ? "White" : "Black"} player</h2>
-          <div className="grid grid-cols-4 gap-3">
+          <input value={side === "w" ? s.whiteName : s.blackName} maxLength={16} placeholder="Your name"
+            onChange={(e) => update(side === "w" ? { whiteName: e.target.value } : { blackName: e.target.value })}
+            className="mb-3 w-full max-w-xs rounded-xl border-2 border-border bg-card px-4 py-2 font-semibold" />
+          <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
             {CHARACTERS.map((c) => {
               const on = (side === "w" ? s.whiteChar : s.blackChar) === c.id;
               return (
                 <button key={c.id} onClick={() => update(side === "w" ? { whiteChar: c.id } : { blackChar: c.id })} className={`${card(on)} flex flex-col items-center`}>
                   <Character id={c.id} mood={on ? "happy" : "neutral"} size={64} />
-                  <div className="font-display font-bold">{c.name}</div>
                 </button>
               );
             })}
