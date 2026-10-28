@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { Chess } from "chess.js";
+import { cleanComment } from "./profanity";
 
 const admin = async () => (await import("@/integrations/supabase/client.server")).supabaseAdmin;
 const token = () => crypto.randomUUID();
@@ -108,5 +109,17 @@ export const playMove = createServerFn({ method: "POST" })
       .update({ fen: chess.fen(), last_from: m.from, last_to: m.to, captured: m.captured ?? null, updated_at: new Date().toISOString() })
       .eq("id", data.id).eq("fen", g.fen);
     if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+export const sayLine = createServerFn({ method: "POST" })
+  .inputValidator((d: { id: string; token: string; text: string }) => ({ id: clean(d.id, 8), token: clean(d.token, 64), text: String(d.text ?? "").slice(0, 60) }))
+  .handler(async ({ data }) => {
+    const text = cleanComment(data.text);
+    if (!text) throw new Error("No swearing please!");
+    const db = await admin();
+    const { data: seat } = await db.from("game_seats").select("color").eq("game_id", data.id).eq("token", data.token).maybeSingle();
+    if (!seat) throw new Error("Not in this game");
+    await db.from("games").update(seat.color === "w" ? { white_say: text, say_at: new Date().toISOString() } : { black_say: text, say_at: new Date().toISOString() }).eq("id", data.id);
     return { ok: true };
   });

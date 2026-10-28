@@ -44,41 +44,50 @@ export type Database = {
         Row: {
           black_char: string | null
           black_name: string | null
+          black_say: string | null
           captured: string | null
           created_at: string
           fen: string
           id: string
           last_from: string | null
           last_to: string | null
+          say_at: string | null
           updated_at: string
           white_char: string
           white_name: string
+          white_say: string | null
         }
         Insert: {
           black_char?: string | null
           black_name?: string | null
+          black_say?: string | null
           captured?: string | null
           created_at?: string
           fen?: string
           id: string
           last_from?: string | null
           last_to?: string | null
+          say_at?: string | null
           updated_at?: string
           white_char?: string
           white_name?: string
+          white_say?: string | null
         }
         Update: {
           black_char?: string | null
           black_name?: string | null
+          black_say?: string | null
           captured?: string | null
           created_at?: string
           fen?: string
           id?: string
           last_from?: string | null
           last_to?: string | null
+          say_at?: string | null
           updated_at?: string
           white_char?: string
           white_name?: string
+          white_say?: string | null
         }
         Relationships: []
       }

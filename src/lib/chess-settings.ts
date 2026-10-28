@@ -34,6 +34,8 @@ export type Settings = {
   blackChar: string;
   whiteName: string;
   blackName: string;
+  lang: string;
+  difficulty: string;
 };
 
 const DEFAULT: Settings = {
@@ -43,6 +45,8 @@ const DEFAULT: Settings = {
   blackChar: "owl",
   whiteName: "Player 1",
   blackName: "Player 2",
+  lang: "en",
+  difficulty: "medium",
 };
 const KEY = "chess-buddies-settings";
 
