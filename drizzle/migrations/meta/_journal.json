@@ -8,6 +8,13 @@
       "when": 1792689852270,
       "tag": "0000_migration",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1793218519487,
+      "tag": "0001_game_comments",
+      "breakpoints": true
     }
   ]
 }

@@ -1,0 +1,1 @@
+ALTER TABLE public.games ADD COLUMN white_say text, ADD COLUMN black_say text, ADD COLUMN say_at timestamptz;
