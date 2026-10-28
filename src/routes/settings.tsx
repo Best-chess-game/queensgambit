@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { BOARD_THEMES, CHARACTERS, PIECE_SETS, useSettings } from "@/lib/chess-settings";
 import { Character } from "@/components/chess/Character";
+import { makeT } from "@/lib/i18n";
 
 export const Route = createFileRoute("/settings")({
   head: () => ({
@@ -20,17 +21,27 @@ const MINI = ["♜", "♞", "♝", "♛"];
 
 function SettingsPage() {
   const [s, update] = useSettings();
+  const t = makeT(s.lang);
   const card = (on: boolean) => `rounded-2xl border-2 p-3 bg-card transition-transform hover:-translate-y-0.5 ${on ? "border-primary shadow-[0_4px_0_var(--primary-shade)]" : "border-border shadow-[0_4px_0_var(--border)]"}`;
 
   return (
     <main className="min-h-screen max-w-3xl mx-auto px-4 py-8 space-y-10">
       <div className="flex items-center justify-between">
-        <h1 className="text-4xl font-bold">Settings</h1>
-        <Link to="/" className="btn-chunky bg-primary text-primary-foreground shadow-[0_5px_0_var(--primary-shade)]">Play</Link>
+        <h1 className="text-4xl font-bold">{t("Settings")}</h1>
+        <Link to="/" className="btn-chunky bg-primary text-primary-foreground shadow-[0_5px_0_var(--primary-shade)]">{t("Play")}</Link>
       </div>
 
       <section>
-        <h2 className="text-2xl font-bold mb-3">Board theme</h2>
+        <h2 className="text-2xl font-bold mb-3">{t("Language")}</h2>
+        <div className="flex gap-3">
+          {[["en", "🇬🇧 English"], ["de", "🇩🇪 Deutsch"]].map(([id, label]) => (
+            <button key={id} onClick={() => update({ lang: id! })} className={card(s.lang === id)}><span className="font-display font-bold">{label}</span></button>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <h2 className="text-2xl font-bold mb-3">{t("Board theme")}</h2>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {BOARD_THEMES.map((t) => (
             <button key={t.id} onClick={() => update({ theme: t.id })} className={card(s.theme === t.id)}>
@@ -48,7 +59,7 @@ function SettingsPage() {
       </section>
 
       <section>
-        <h2 className="text-2xl font-bold mb-3">Pieces</h2>
+        <h2 className="text-2xl font-bold mb-3">{t("Pieces")}</h2>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {PIECE_SETS.map((p) => (
             <button key={p.id} onClick={() => update({ pieceSet: p.id })} className={card(s.pieceSet === p.id)}>
@@ -67,8 +78,8 @@ function SettingsPage() {
 
       {(["w", "b"] as const).map((side) => (
         <section key={side}>
-          <h2 className="text-2xl font-bold mb-3">{side === "w" ? "White" : "Black"} player</h2>
-          <input value={side === "w" ? s.whiteName : s.blackName} maxLength={16} placeholder="Your name"
+          <h2 className="text-2xl font-bold mb-3">{t(side === "w" ? "White player" : "Black player")}</h2>
+          <input value={side === "w" ? s.whiteName : s.blackName} maxLength={16} placeholder={t("Your name")}
             onChange={(e) => update(side === "w" ? { whiteName: e.target.value } : { blackName: e.target.value })}
             className="mb-3 w-full max-w-xs rounded-xl border-2 border-border bg-card px-4 py-2 font-semibold" />
           <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
