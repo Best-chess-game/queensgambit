@@ -56,6 +56,7 @@ function Index() {
         </div>
       )} />
   );
+  return <Game mode={mode} onExit={() => setMode("menu")} />;
 }
 
 function Menu({ onPick }: { onPick: (m: Mode) => void }) {
