@@ -1,3 +1,3 @@
 # Roadmap
 - [x] Better wallpaper on the menu page
-- [ ] Character customisation per player: hair, eyes, clothes, accessories, colour
+- [x] Names before match, comments with swear filter, bot difficulty, sounds, checkmate banner, German
